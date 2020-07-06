@@ -9,10 +9,15 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("sample.fxml"));
+        Parent root = loader.load();
+        Controller contr = loader.getController();
         primaryStage.setTitle("Strong connectivity");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 700, 460));
+        primaryStage.widthProperty().addListener(contr.listener);
+        primaryStage.heightProperty().addListener(contr.listener);
+
         primaryStage.show();
     }
 
