@@ -28,7 +28,7 @@
                         <Canvas fx:id="mainCanvas" height="330.0" onMouseClicked="#canvasClick" width="379.0" />
                      </children>
                   </Pane>
-                  <TextArea editable="false" layoutX="15.0" layoutY="345.0" prefHeight="50.0" prefWidth="361.0" style="-fx-background-color: BLACK;" text="Текстовые пояснения . . ." wrapText="true" AnchorPane.bottomAnchor="3.0" />
+                  <TextArea fx:id="mainTextArea" editable="false" layoutX="15.0" layoutY="345.0" prefHeight="50.0" prefWidth="361.0" style="-fx-background-color: BLACK;" text="Текстовые пояснения . . ." wrapText="true" AnchorPane.bottomAnchor="3.0" />
                </children>
             </AnchorPane>
           <AnchorPane>

@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.scene.control.TextArea;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -22,7 +23,7 @@ public class importManager {
     ArrayList<Pair<Integer, Integer>> graph;
     int size;
 
-    public importManager(String name) throws IOException {
+    public importManager(String name, TextArea mainTextArea) throws IOException {
 
         Path pathImport = Paths.get(name);
         graph = new ArrayList<Pair<Integer, Integer>>();
@@ -40,11 +41,13 @@ public class importManager {
             }
             isOpenAndReadOK = true;
         }
-        catch(IOException e){
-            System.out.println("Файл для импорта не найден: " +   e.getMessage());
+        catch(IOException e) {
+            mainTextArea.setText("Файл для импорта не найден: " +   e.getMessage());
+            //System.out.println("Файл для импорта не найден: " +   e.getMessage());
         }
         catch(ClassCastException|NumberFormatException e){
-            System.out.println("Формат текста в файле некорректный: " +  e.getMessage());
+            mainTextArea.setText("Формат текста в файле некорректный: " +  e.getMessage());
+            //System.out.println("Формат текста в файле некорректный: " +  e.getMessage());
         }
     }
 

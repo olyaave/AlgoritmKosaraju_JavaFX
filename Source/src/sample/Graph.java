@@ -2,6 +2,7 @@ package sample;
 
 import com.Algorithm.AlgorithmKosarayu;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Pair;
@@ -107,8 +108,8 @@ public class Graph {
         }
     }
 
-    public void inputFileGraph(GraphicsContext gc) throws IOException {
-        importManager graph = new importManager("tests/test_2.txt");
+    public void inputFileGraph(GraphicsContext gc, TextArea mainTextArea) throws IOException {
+        importManager graph = new importManager(ModalWindow.fileName, mainTextArea);
         ArrayList<Pair<Integer, Integer>> list = graph.getGraph();
         if (list == null) { System.out.println("Файл не найден."); return; }  // сделать эксепшены
         System.out.println("Граф импортирован.");

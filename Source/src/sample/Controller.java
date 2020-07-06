@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
 
@@ -127,7 +128,8 @@ public class Controller {
     @FXML
     public void importG() throws IOException
     {
-        graph.inputFileGraph(mainCanvas.getGraphicsContext2D());
+        ModalWindow.newWindow("Импорт из файла");
+        graph.inputFileGraph(mainCanvas.getGraphicsContext2D(), mainTextArea);
     }
 
     public ChangeListener listener = (observableValue, o, t1) -> resizeCanvas();
@@ -141,6 +143,9 @@ public class Controller {
 
     @FXML
     private Canvas mainCanvas;
+
+    @FXML
+    private TextArea mainTextArea;
 
     private final Graph graph = new Graph();
 
