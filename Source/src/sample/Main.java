@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = loader.load();
         Controller contr = loader.getController();
         primaryStage.setTitle("Strong connectivity");
-        primaryStage.setScene(new Scene(root, 700, 460));
+        primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.widthProperty().addListener(contr.listener);
         primaryStage.heightProperty().addListener(contr.listener);
 

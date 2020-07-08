@@ -5,19 +5,24 @@ import java.util.ArrayList;
 public class Vertex {
 
     private final Integer NAME;                 //имя
-
-    private ArrayList<Vertex> adjacentVertex;  //список смежных веfршин
+    private Integer whence = -1;                //из какой вершины попали
+    private ArrayList<Vertex> adjacentVertex;   //список смежных вершин
 
     private int color = -1;                     //цвет, в который вершина окрашена (для dfs)
     private int component = -1;                 //компонента связности
     private int timeIn = -1;                    //время входа (для dfs)
     private int timeOut = -1;                   //время выхода (для dfs)
 
+
     public Vertex(Integer NAME) {
         this.NAME = NAME;
         adjacentVertex = new ArrayList<Vertex>();
     }
     //сеттеры
+    public void setWhence(Integer whence) {
+        this.whence = whence;
+    }
+
     public void setColor(int color) {
         this.color = color;
     }
@@ -40,6 +45,10 @@ public class Vertex {
     //геттеры
     public Integer getNAME() {
         return NAME;
+    }
+
+    public Integer getWhence() {
+        return whence;
     }
 
     public int getColor() {

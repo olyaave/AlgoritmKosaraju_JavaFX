@@ -23,12 +23,13 @@
         <items>
           <AnchorPane style="-fx-background-color: #a1d0f0;">
                <children>
-                  <Pane prefHeight="330.0" prefWidth="379.0" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                  <Pane prefHeight="352.0" prefWidth="379.0" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <Canvas fx:id="mainCanvas" height="330.0" onMouseClicked="#canvasClick" width="379.0" />
                      </children>
                   </Pane>
-                  <TextArea fx:id="mainTextArea" editable="false" layoutX="15.0" layoutY="345.0" prefHeight="50.0" prefWidth="361.0" style="-fx-background-color: BLACK;" text="Текстовые пояснения . . ." wrapText="true" AnchorPane.bottomAnchor="3.0" />
+                  <TextArea fx:id="mainTextArea" editable="false" layoutX="15.0" layoutY="345.0" prefHeight="50.0" prefWidth="361.0" style="-fx-background-color: BLACK;" text="Текстовые пояснения . . ." wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+                  <HBox fx:id="mainLabel" layoutX="4.0" layoutY="357.0" prefHeight="18.0" prefWidth="379.0" AnchorPane.bottomAnchor="55.0" />
                </children>
             </AnchorPane>
           <AnchorPane>
@@ -41,17 +42,17 @@
                            </VBox.margin></Button>
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#isBtnAddVertClicked" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Добавить вершину" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#isBtnAddRibClicked" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Добавить ребро" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Удалить вершину" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Удалить ребро">
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#isBtnDelVertClicked" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Удалить вершину" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#isBtnDelRibClicked" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #fcf121;" text="Удалить ребро">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin></Button>
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#runAlgorithm" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #cf2f1d;" text="Запуск" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #7db8e3;" text="Шаг вперед">
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#stepForward" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #7db8e3;" text="Шаг вперед">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin></Button>
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #f56505;" text="Показать результат" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showResult" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #f56505;" text="Показать результат" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #f56505;" text="Стоп" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clearButton" prefHeight="30.0" prefWidth="158.0" style="-fx-background-color: #f56505;" text="Очистить" />
                      </children>

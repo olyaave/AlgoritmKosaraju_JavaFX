@@ -16,39 +16,45 @@ import java.util.ArrayList;
 * "folder_project/name.txt"
 */
 
-public class importManager {
+public class ImportManager {
 
     private File f;
     private boolean isOpenAndReadOK;
-    ArrayList<Pair<Integer, Integer>> graph;
+    private ArrayList<Pair<Integer, Integer>> graph;
     int size;
 
-    public importManager(String name, TextArea mainTextArea) throws IOException {
+    public ImportManager(String name, TextArea mainTextArea) throws IOException {
 
         Path pathImport = Paths.get(name);
         graph = new ArrayList<Pair<Integer, Integer>>();
 
         try(BufferedReader in = Files.newBufferedReader(pathImport)){
+//            size = Integer.parseInt(in.readLine());
+//            for (int i = 0; i < size; i++){
+            String line = in.readLine();
+            while (line != null){
 
-            size = Integer.parseInt(in.readLine());
-            for (int i = 0; i < size; i++){
-
-                String[] line = (in.readLine()).split(" ", 2);
-                Integer start = Integer.parseInt(line[0]);
-                Integer end = Integer.parseInt(line[1]);
+                String[] rib = (line).split(" ", 2);
+                if (rib.length < 2 || rib[0].equals("") || rib[1].equals("")) {
+                    throw new NumberFormatException(line);
+                }
+                Integer start = Integer.parseInt(rib[0]);
+                Integer end = Integer.parseInt(rib[1]);
+                if (start < 0 || end == 0 || end < -1)
+                    throw new NumberFormatException(line);
                 graph.add(new Pair(start, end));
 
+                line = in.readLine();
             }
             isOpenAndReadOK = true;
         }
         catch(IOException e) {
-            mainTextArea.setText("Файл для импорта не найден: " +   e.getMessage());
-            //System.out.println("Файл для импорта не найден: " +   e.getMessage());
+            mainTextArea.setText("Файл для импорта не найден.");
         }
         catch(ClassCastException|NumberFormatException e){
-            mainTextArea.setText("Формат текста в файле некорректный: " +  e.getMessage());
-            //System.out.println("Формат текста в файле некорректный: " +  e.getMessage());
+            mainTextArea.setText("Формат текста в файле некорректный: \"" +  e.getMessage() + "\"");
         }
+
     }
 
     public ArrayList<Pair<Integer, Integer>> getGraph(){
