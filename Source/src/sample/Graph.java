@@ -40,6 +40,7 @@ public class Graph {
 
     public void removeEdge(Vertex vert1, Vertex vert2, GraphicsContext gc) {
         vert1.getAdj().remove(vert2);
+        vert2.getAdj().remove(vert1);
         drawAll(gc);
     }
 
@@ -194,7 +195,7 @@ public class Graph {
 //        System.out.println("Высота " + toY);
         double X;
         double Y;
-        double LIMITMAX = 160;
+        double LIMITMAX = 160;  // изменить на нестатические
         double LIMITMIN = 50;
         double diffVertexes = 50;   // расстояние между вершинами
         Random randomX = new Random();

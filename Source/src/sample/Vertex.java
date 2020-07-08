@@ -19,7 +19,7 @@ public class Vertex {
     public Vertex(double x, double y, int number) {
         this.x = x;
         this.y = y;
-        this.number = number;   // могут быть проблемы с нумерацией из-за этого
+        this.number = number;
     }
 
     public void draw(GraphicsContext gc) {
@@ -47,7 +47,7 @@ public class Vertex {
     }
 
     public boolean isDotInRadius(double dotX, double dotY, double diff) {
-        return (dotX - x)*(dotX - x) + (dotY - y)*(dotY - y) <= (RADIUS+diff)*(RADIUS+diff);
+        return (dotX - x)*(dotX - x) + (dotY - y)*(dotY - y) <= (RADIUS*3/2+diff)*(RADIUS*3/2+diff);
     }
 
     public void addAdj(Vertex vert) {

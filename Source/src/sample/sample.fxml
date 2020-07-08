@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane alignment="center" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints hgrow="ALWAYS" prefWidth="600.0" />
@@ -29,7 +28,7 @@
                      </children>
                   </Pane>
                   <TextArea fx:id="mainTextArea" editable="false" layoutX="15.0" layoutY="345.0" prefHeight="50.0" prefWidth="361.0" style="-fx-background-color: BLACK;" text="Текстовые пояснения . . ." wrapText="true" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-                  <HBox fx:id="mainLabel" layoutX="4.0" layoutY="357.0" prefHeight="18.0" prefWidth="379.0" AnchorPane.bottomAnchor="55.0" />
+                  <HBox fx:id="mainLabel" layoutX="4.0" layoutY="357.0" prefHeight="17.0" prefWidth="379.0" AnchorPane.bottomAnchor="55.0" />
                </children>
             </AnchorPane>
           <AnchorPane>

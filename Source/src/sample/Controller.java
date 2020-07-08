@@ -119,6 +119,7 @@ public class Controller {
         if (!isVisualiseProcess) {
             mainTextArea.setText("Запуск алгоритма");
             isVisualiseProcess = true;
+//            mainLabel.setMaxWidth(mainCanvas.getWidth());
             graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
             mainLabel.getChildren().add(new Label("Порядок вершин:"));
             graph.runAlgorithm(mainCanvas.getGraphicsContext2D());
@@ -134,6 +135,7 @@ public class Controller {
         isBtnDelVClicked = false;
         isBtnDelRClicked = false;
         prevChosenVertex = null;
+        mainTextArea.setText("Поле очищено.");
         graph = new Graph();
         graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
         graph.drawAll(mainCanvas.getGraphicsContext2D());
@@ -173,9 +175,12 @@ public class Controller {
 
     public ChangeListener listener = (observableValue, o, t1) -> resizeCanvas();
 
-    private void resizeCanvas() {
+    public void resizeCanvas() {
         mainCanvas.setHeight(((Pane)(mainCanvas.getParent())).getHeight());
+        System.out.println(((Pane)(mainCanvas.getParent())).getHeight());
+
         mainCanvas.setWidth(((Pane)(mainCanvas.getParent())).getWidth());
+        System.out.println(((Pane)(mainCanvas.getParent())).getWidth());
         graph.drawAll(mainCanvas.getGraphicsContext2D());
     }
 
