@@ -1,10 +1,14 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main extends Application {
 
@@ -15,6 +19,17 @@ public class Main extends Application {
         Controller contr = loader.getController();
         contr.resizeCanvas();
 
+        Timer timer = new java.util.Timer();
+
+        timer.schedule(new TimerTask() {
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        contr.resizeCanvas();
+                    }
+                });
+            }
+        }, 1000, 1000);
         primaryStage.setTitle("Strong connectivity");
         primaryStage.setScene(new Scene(root, 800, 500));
         primaryStage.widthProperty().addListener(contr.listener);

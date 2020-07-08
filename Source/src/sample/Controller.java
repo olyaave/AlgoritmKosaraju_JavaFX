@@ -177,10 +177,7 @@ public class Controller {
 
     public void resizeCanvas() {
         mainCanvas.setHeight(((Pane)(mainCanvas.getParent())).getHeight());
-        System.out.println(((Pane)(mainCanvas.getParent())).getHeight());
-
         mainCanvas.setWidth(((Pane)(mainCanvas.getParent())).getWidth());
-        System.out.println(((Pane)(mainCanvas.getParent())).getWidth());
         graph.drawAll(mainCanvas.getGraphicsContext2D());
     }
 
