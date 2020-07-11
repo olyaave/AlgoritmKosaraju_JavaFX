@@ -1,184 +1,283 @@
 package sample;
 
-import javafx.beans.value.ChangeListener;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-
-
-import java.io.IOException;
+import javafx.util.Duration;
 
 public class Controller {
-
-//    public final LogString logging = new LogString();
-
     boolean isBtnAddVClicked = false;
     boolean isBtnAddRClicked = false;
     boolean isBtnDelVClicked = false;
     boolean isBtnDelRClicked = false;
+    boolean isDraggedProcess = false;
     boolean isVisualiseProcess = false;
 
     @FXML
     // Function for reacting to a button click
-    public void isBtnAddVertClicked() {
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        isVisualiseProcess = false;
+    private void isBtnAddVertClicked() {
         if(!isBtnAddVClicked) {
+            mainTextArea.setText("Нажмите на поле для добавления вершины.");
             isBtnAddVClicked = true;
             isBtnAddRClicked = false;
             isBtnDelVClicked = false;
             isBtnDelRClicked = false;
-
         }
         else isBtnAddVClicked = false;
-        prevChosenVertex = null;
+        setPrevChosenVertex(null);
     }
+
     @FXML
-    public void isBtnAddRibClicked() {
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        isVisualiseProcess = false;
+    private void isBtnAddRibClicked() {
         if(!isBtnAddRClicked) {
+            mainTextArea.setText("Выберите две вершины для добавления ребра.");
             isBtnAddRClicked = true;
             isBtnAddVClicked = false;
             isBtnDelVClicked = false;
             isBtnDelRClicked = false;
         }
-        else isBtnAddRClicked = false;
-        prevChosenVertex = null;
+        else {
+            isBtnAddRClicked = false;
+            mainTextArea.setText("");
+        }
+        setPrevChosenVertex(null);
     }
+
     @FXML
-    public void isBtnDelVertClicked() {
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        isVisualiseProcess = false;
+    private void isBtnDelVertClicked() {
         if(!isBtnDelVClicked) {
+            mainTextArea.setText("Выберите вершины для удаления.");
             isBtnDelVClicked = true;
             isBtnDelRClicked = false;
             isBtnAddRClicked = false;
             isBtnAddVClicked = false;
         }
-        else isBtnDelVClicked = false;
-        prevChosenVertex = null;
+        else {
+            isBtnDelVClicked = false;
+            mainTextArea.setText("");
+        }
+        setPrevChosenVertex(null);
     }
+
     @FXML
-    public void isBtnDelRibClicked() {
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        isVisualiseProcess = false;
+    private void isBtnDelRibClicked() {
         if(!isBtnDelRClicked) {
+            mainTextArea.setText("Выберите две вершины для удаления ребра.");
             isBtnDelRClicked = true;
             isBtnDelVClicked = false;
             isBtnAddRClicked = false;
             isBtnAddVClicked = false;
         }
         else isBtnDelRClicked = false;
-        prevChosenVertex = null;
+        setPrevChosenVertex(null);
     }
 
-    public void canvasClick(javafx.scene.input.MouseEvent mouseEvent) {
-        if (isVisualiseProcess) return;
+    // обработка нажатия на область для добавления графа
+    private void canvasClick(javafx.scene.input.MouseEvent mouseEvent) {
         Vertex curChosenVertex = graph.checkCollision(mouseEvent.getX(), mouseEvent.getY(), 0);
         if (isBtnAddVClicked || isBtnAddRClicked) {
-            if (curChosenVertex == null && isBtnAddVClicked) {  // только при нажатии кнопки добавления вершины
-                graph.addVertex(new Vertex(mouseEvent.getX(), mouseEvent.getY()),
-                        mainCanvas.getGraphicsContext2D());
-                prevChosenVertex = null;
+            if (curChosenVertex == null && isBtnAddVClicked) {
+                int numb = 1;
+                while(graph.findVertex(numb) != null)
+                    numb++;
+                graph.addVertex(new Vertex(mouseEvent.getX(), mouseEvent.getY(), numb));
+                setPrevChosenVertex(null);
             }
             else if (curChosenVertex != null && prevChosenVertex != null) {
-                graph.addEdge(prevChosenVertex, curChosenVertex, mainCanvas.getGraphicsContext2D());
-                prevChosenVertex = null;
+                graph.addEdge(prevChosenVertex, curChosenVertex);
+                setPrevChosenVertex(null);
             }
-            else if (isBtnAddRClicked)
-                prevChosenVertex = curChosenVertex;
+            else if (isBtnAddRClicked) {
+                setPrevChosenVertex(curChosenVertex);
+            }
         }
         else if (isBtnDelVClicked) {
             if (curChosenVertex != null) {
-                graph.removeVertex(curChosenVertex, mainCanvas.getGraphicsContext2D());
-                prevChosenVertex = null;
+                graph.removeVertex(curChosenVertex);
+                setPrevChosenVertex(null);
             }
         }
         else if (isBtnDelRClicked) {
             if (curChosenVertex != null && prevChosenVertex != null) {
-                graph.removeEdge(prevChosenVertex, curChosenVertex, mainCanvas.getGraphicsContext2D());
-                prevChosenVertex = null;
+                graph.removeEdge(prevChosenVertex, curChosenVertex);
+                setPrevChosenVertex(null);
             }
             else {
-                prevChosenVertex = curChosenVertex;
+                setPrevChosenVertex(curChosenVertex);
             }
         }
     }
-
-    public void runAlgorithm() {
-        isBtnAddVClicked = false;
-        isBtnAddRClicked = false;
-        isBtnDelVClicked = false;
-        isBtnDelRClicked = false;
-        prevChosenVertex = null;
-
-        if (!isVisualiseProcess) {
-            mainTextArea.setText("Запуск алгоритма");
-            isVisualiseProcess = true;
-//            mainLabel.setMaxWidth(mainCanvas.getWidth());
-            graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-            mainLabel.getChildren().add(new Label("Порядок вершин:"));
-            graph.runAlgorithm(mainCanvas.getGraphicsContext2D());
-        }
-        else {
-            mainTextArea.setText("Алгоритм уже запущен");
-        }
-    }
-
-    public void clearButton() {
-        isBtnAddVClicked = false;
-        isBtnAddRClicked = false;
-        isBtnDelVClicked = false;
-        isBtnDelRClicked = false;
-        prevChosenVertex = null;
-        mainTextArea.setText("Поле очищено.");
-        graph = new Graph();
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        graph.drawAll(mainCanvas.getGraphicsContext2D());
-    }
-
-    public void stepForward() {
-        if (isVisualiseProcess) {
-            if (graph.isLastEvent()) {
-                isVisualiseProcess = false;
-                graph.endAlgorithm(mainCanvas.getGraphicsContext2D(), mainTextArea, mainLabel);
-            }
-            else
-                graph.visualiseStep(mainCanvas.getGraphicsContext2D(), mainTextArea, mainLabel);
-        }
-    }
-
-    public void showResult() {
-        if (isVisualiseProcess)
-            graph.endAlgorithm(mainCanvas.getGraphicsContext2D(), mainTextArea, mainLabel);
-        isVisualiseProcess = false;
-    }
-
-
-    /**
-     * Import from file
-     * */
 
     @FXML
-    public void importG() throws IOException
-    {
-        ModalWindow.newWindow("Импорт из файла");
-        graph.standardView(mainCanvas.getGraphicsContext2D(), mainLabel);
-        graph = new Graph();
-        graph.drawAll(mainCanvas.getGraphicsContext2D());
-        graph.inputFileGraph(mainCanvas.getGraphicsContext2D(), mainTextArea);
+    private void canvasMousePressed(javafx.scene.input.MouseEvent mouseEvent) {
+        draggedVertex = graph.checkCollision(mouseEvent.getX(), mouseEvent.getY(), 0);
     }
 
-    public ChangeListener listener = (observableValue, o, t1) -> resizeCanvas();
+    @FXML
+    private void canvasMouseReleased(javafx.scene.input.MouseEvent mouseEvent) {
+        if (!isVisualiseProcess && !isDraggedProcess) {
+            canvasClick(mouseEvent);
+        }
+        draggedVertex = null;
+        isDraggedProcess = false;
+    }
+
+    @FXML
+    private void canvasMouseDragged(javafx.scene.input.MouseEvent mouseEvent) {
+        if (draggedVertex != null) {
+            draggedVertex.setX(mouseEvent.getX());
+            draggedVertex.setY(mouseEvent.getY());
+            isDraggedProcess = true;
+        }
+    }
+
+    @FXML
+    private void runAlgorithm() {
+        isBtnAddVClicked = false;
+        isBtnAddRClicked = false;
+        isBtnDelVClicked = false;
+        isBtnDelRClicked = false;
+        setPrevChosenVertex(null);
+        if (graph.isEmpty()) {
+            mainTextArea.setText("Граф пуст.\n");
+            return;
+        }
+
+        switchVisualize();
+        mainTextArea.setText("Алгоритм запущен.\n");
+        mainLabel.getChildren().add(new Label("Порядок вершин:"));
+        graph.runAlgorithm();
+    }
+
+    @FXML
+    private void clearButton() {
+        isBtnAddVClicked = false;
+        isBtnAddRClicked = false;
+        isBtnDelVClicked = false;
+        isBtnDelRClicked = false;
+        setPrevChosenVertex(null);
+        mainTextArea.setText("Поле очищено.\n");
+        graph = new Graph();
+    }
+
+    @FXML
+    private void stopButton() {
+        isBtnAddVClicked = false;
+        isBtnAddRClicked = false;
+        isBtnDelVClicked = false;
+        isBtnDelRClicked = false;
+        setPrevChosenVertex(null);
+        graph.endAlgorithm(mainTextArea, mainLabel);
+        mainTextArea.setText("Алгоритм остановлен.\n");
+        switchVisualize();
+    }
+
+    @FXML
+    private void stepForward() {
+        if (graph.isLastEvent()) {
+            graph.endAlgorithm(mainTextArea, mainLabel);
+            disableButton(stepButton);
+            disableButton(showButton);
+        }
+        else
+            graph.visualiseStep(mainTextArea, mainLabel);
+        activeButton(stepButtonBack);
+    }
+
+    @FXML
+    private void stepBack() {
+        graph.visualiseStepBack(mainTextArea, mainLabel);
+        if (graph.isFirstEvent()) {
+            disableButton(stepButtonBack);
+        }
+        activeButton(stepButton);
+        activeButton(showButton);
+        if (graph.isLastEvent()) {
+            Timeline timeline = new Timeline(
+                    new KeyFrame(
+                            Duration.millis(50),
+                            ae -> mainTextArea.setScrollTop(Double.MAX_VALUE)
+                    )
+            );
+            timeline.setCycleCount(1);
+            timeline.play();
+        }
+    }
+
+    @FXML
+    private void showResult() {
+        graph.endAlgorithm(mainTextArea, mainLabel);
+        disableButton(stepButton);
+        disableButton(showButton);
+        activeButton(stepButtonBack);
+    }
+
+    @FXML
+    private void importG() throws Throwable
+    {
+        ModalWindow.newWindow("Импорт из файла");
+        graph = new Graph();
+        graph.inputFileGraph(mainCanvas.getGraphicsContext2D(), mainTextArea);
+    }
 
     public void resizeCanvas() {
         mainCanvas.setHeight(((Pane)(mainCanvas.getParent())).getHeight());
         mainCanvas.setWidth(((Pane)(mainCanvas.getParent())).getWidth());
         graph.drawAll(mainCanvas.getGraphicsContext2D());
+    }
+
+    //переключение между режимими добавления графа и показом алгоритма
+    private void switchVisualize() {
+        graph.standardView(mainLabel);
+        if (isVisualiseProcess) {
+            activeButton(importButton);
+            activeButton(addVButton);
+            activeButton(addEButton);
+            activeButton(delVButton);
+            activeButton(delEButton);
+            activeButton(runButton);
+            disableButton(stepButton);
+            disableButton(stepButtonBack);
+            disableButton(showButton);
+            disableButton(stopButton);
+            activeButton(clearButton);
+        }
+        else {
+            disableButton(importButton);
+            disableButton(addVButton);
+            disableButton(addEButton);
+            disableButton(delVButton);
+            disableButton(delEButton);
+            disableButton(runButton);
+            activeButton(stepButton);
+            disableButton(stepButtonBack);
+            activeButton(showButton);
+            activeButton(stopButton);
+            disableButton(clearButton);
+        }
+        isVisualiseProcess = !isVisualiseProcess;
+    }
+
+    private void disableButton(Button button) {
+        button.setOpacity(0.75);
+        button.setDisable(true);
+    }
+    private void activeButton(Button button) {
+        button.setOpacity(1.0);
+        button.setDisable(false);
+    }
+
+    // запоминание предыдущей выбраной вершины для добавления и удаления рёбер
+    private void setPrevChosenVertex(Vertex vert) {
+        if (prevChosenVertex != null) prevChosenVertex.setRinged(false);
+        prevChosenVertex = vert;
+        if (prevChosenVertex != null) prevChosenVertex.setRinged(true);
     }
 
     @FXML
@@ -190,8 +289,13 @@ public class Controller {
     @FXML
     private HBox mainLabel;
 
+    @FXML
+    private Button importButton, addVButton, addEButton, delVButton, delEButton,
+            runButton, stepButton, stepButtonBack, showButton, stopButton, clearButton;
+
     private Graph graph = new Graph();
 
     private Vertex prevChosenVertex;
+    private Vertex draggedVertex;
 
 }

@@ -2,23 +2,28 @@ package com.Algorithm;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
-public class AlgorithmKosarayu {
+public class AlgorithmKosarayu{
 
-    private ArrayList<Vertex> graph = new ArrayList<Vertex>();          //граф
-
+    private ArrayList<Vertex> graph = new ArrayList<Vertex>();               //граф
     private ArrayList<Pair<Integer, Integer>> timeOut;                  //время выхода
     private ArrayList<Event> events;                                    //список событий для пошаговой визуализации
+    private ArrayList<Pair<Integer, Integer>> listEdge;                 //список ребер
+
     private int dfsTimer = 1;                                           //таймер для определения времени
     private int component = 1;
 
     public AlgorithmKosarayu() {
+        listEdge = new ArrayList<Pair<Integer, Integer>>();
         timeOut = new ArrayList<Pair<Integer, Integer>>();
         events = new ArrayList<Event>();
     }
 
     public ArrayList<Event> start(ArrayList<Pair<Integer, Integer>> listEdge) {
+
         //вызов методов, в последовательности задаваемой алгоритмом
-        initGraph(listEdge);                                            //инициализация графа, заданного списком ребер
+        this.listEdge = listEdge;
+
+        initGraph();                                            //инициализация графа, заданного списком ребер
 
         for (int i = 0; i < graph.size(); i++) {                        //запуск поиска в глубину с фиксированием времени выхода
 
@@ -34,22 +39,23 @@ public class AlgorithmKosarayu {
             }
         }
 
-        listEdge = inverting(listEdge);                                 //инвертированный список ребер
+        this.listEdge = inverting();                                 //инвертирование инвертированного списка рёбер
 
         events.add(new Event(5));
-        events.get(events.size()-1).setInventedListEdge(listEdge);
+        events.get(events.size()-1).setInventedListEdge(this.listEdge);
         events.get(events.size() - 1).setTextHints("Изменение направлений ребер на противоположные. " +
                 "Инвертированный граф изображен на экране.\n");
         //событие: инвертирование графа
 
         graph.clear();
-        initGraph(listEdge);                                            //инвертированный граф
+        initGraph();                                            //инвертированный граф
 
         for (int i = timeOut.size() - 1; i >= 0; i--) {                 //идем по убыванию времени выхода
-            Event newEvent = new Event(10);
             int index = find(timeOut.get(i).getKey());                  //индекс вершины в графе
-            newEvent.setTextHints("Следующая вершина по порядку времени выхода " + graph.get(index).getNAME() + "\n");
-            events.add(newEvent);
+            events.add(new Event(10));
+            events.get(events.size()-1).setNameVertex(graph.get(index).getNAME());
+            events.get(events.size()-1).setTextHints("Следующая вершина по порядку времени выхода " +
+                    graph.get(index).getNAME() + ".\n");
             if (graph.get(index).getColor() == -1) {                    //если не посещена раннее
                 graph.get(index).setComponent(component++);             //фиксируем принадлежность к компоненте
 
@@ -63,16 +69,17 @@ public class AlgorithmKosarayu {
             }
         }
 
+        this.listEdge = inverting();                                 //инвертированный список ребер
+
         events.add(new Event(5));
-        events.get(events.size()-1).setInventedListEdge(listEdge);
+        events.get(events.size()-1).setInventedListEdge(this.listEdge);
         events.get(events.size() - 1).setTextHints("Изменение направлений ребер на противоположные. " +
                 "Инвертированный граф изображен на экране.\n");
         //событие: инвертирование графа
-
         return events;
     }
 
-    private void initGraph(ArrayList<Pair<Integer, Integer>> listEdge) {
+    private void initGraph() {
         //принимает список ребер и преобразовывает в списки смежности вершин
 
         for(int i = 0; i < listEdge.size(); i++) {
@@ -118,21 +125,22 @@ public class AlgorithmKosarayu {
 
     private void dfs1(int index) {
 
-        graph.get(index).setTimeIn(dfsTimer++);                                                                 //время входа
+        //  graph.get(index).setTimeIn(dfsTimer++);                                                                 //время входа
         graph.get(index).setColor(0);                                                                           //обрабатывается
 
         for(int i = 0; i < graph.get(index).getAdjacentVertex().size(); i++) {
             if(graph.get(index).getAdjacentVertex().get(i).getColor() == -1) {                                  //если есть смежная непосещенная
                 if(graph.get(index).getNAME() != graph.get(index).getAdjacentVertex().get(i).getNAME())
                     graph.get(index).getAdjacentVertex().get(i).setWhence(graph.get(index).getNAME());          //запоминаем как в нее пришли
-                    events.add(new Event(3));
-                    events.get(events.size() - 1).setTransition(graph.get(index).getNAME(), graph.get(index).getAdjacentVertex().get(i).getNAME());
-                    events.get(events.size() - 1).setTextHints("Найдено ребро между вершинами " + graph.get(index).getNAME() +
-                            " и " + graph.get(index).getAdjacentVertex().get(i).getNAME() + ". Переход из " +
-                            graph.get(index).getNAME() + " в " + graph.get(index).getAdjacentVertex().get(i).getNAME() + ".\n");
-                    //событие: переход по ребру - откуда, куда
 
-                    dfs1(find(graph.get(index).getAdjacentVertex().get(i).getNAME()));                          //запускаем поиск от нее
+                events.add(new Event(3));
+                events.get(events.size() - 1).setTransition(graph.get(index).getNAME(), graph.get(index).getAdjacentVertex().get(i).getNAME());
+                events.get(events.size() - 1).setTextHints("Найдено ребро между вершинами " + graph.get(index).getNAME() +
+                        " и " + graph.get(index).getAdjacentVertex().get(i).getNAME() + ". Переход из " +
+                        graph.get(index).getNAME() + " в " + graph.get(index).getAdjacentVertex().get(i).getNAME() + ".\n");
+                //событие: переход по ребру - откуда, куда
+
+                dfs1(find(graph.get(index).getAdjacentVertex().get(i).getNAME()));                          //запускаем поиск от нее
             }
         }
         graph.get(index).setColor(1);                                                                           //обрабатана
@@ -155,7 +163,7 @@ public class AlgorithmKosarayu {
         }
     }
 
-    private ArrayList<Pair<Integer, Integer>> inverting(ArrayList<Pair<Integer, Integer>> listEdge) {
+    private ArrayList<Pair<Integer, Integer>> inverting() {
 
         ArrayList<Pair<Integer, Integer>> inventedListEdge = new ArrayList<Pair<Integer, Integer>>();
 

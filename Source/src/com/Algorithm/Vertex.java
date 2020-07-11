@@ -10,7 +10,6 @@ public class Vertex {
 
     private int color = -1;                     //цвет, в который вершина окрашена (для dfs)
     private int component = -1;                 //компонента связности
-    private int timeIn = -1;                    //время входа (для dfs)
     private int timeOut = -1;                   //время выхода (для dfs)
 
 
@@ -29,10 +28,6 @@ public class Vertex {
 
     public void setComponent(int component) {
         this.component = component;
-    }
-
-    public void setTimeIn(int timeIn) {
-        this.timeIn = timeIn;
     }
 
     public void setTimeOut(int timeOut) {
@@ -58,8 +53,6 @@ public class Vertex {
     public int getComponent() {
         return component;
     }
-
-    //public int getTimeIn() { return timeIn; } //возможно пригодится для вывода промежуточных данных - пока оставлю
 
     public int getTimeOut() {
         return timeOut;
