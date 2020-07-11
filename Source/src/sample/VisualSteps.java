@@ -117,4 +117,14 @@ public class VisualSteps {
             }
         }
     }
+
+    // событие попытки перехода по недревесной вершине
+    public static void event11(ArrayList<Vertex> vertexes, int fromNumber, int toNumber) {
+        for (Vertex vert: vertexes) {
+            vert.setNextSelectedEdge(0);
+            if (vert.getNumber() == fromNumber) {
+                vert.addSelectedEdge(toNumber, Color.DARKGREEN);
+            }
+        }
+    }
 }

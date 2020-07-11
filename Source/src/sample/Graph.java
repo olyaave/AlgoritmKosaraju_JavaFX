@@ -190,6 +190,9 @@ public class Graph {
                         get(labelBox.getChildren().size() - orderIndex++ - 1))).setTextFill(Color.RED);
                 VisualSteps.event10(vertexes, event.getNameVertex());
                 break;
+            case 11:
+                VisualSteps.event11(vertexes, event.getTransition().getKey(), event.getTransition().getValue());
+                break;
         }
     }
 

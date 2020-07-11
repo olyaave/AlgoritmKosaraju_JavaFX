@@ -142,6 +142,13 @@ public class AlgorithmKosarayu{
 
                 dfs1(find(graph.get(index).getAdjacentVertex().get(i).getNAME()));                          //запускаем поиск от нее
             }
+            else {
+                events.add(new Event(11));
+                events.get(events.size() - 1).setTransition(graph.get(index).getNAME(), graph.get(index).getAdjacentVertex().get(i).getNAME());
+                events.get(events.size() - 1).setTextHints("Вершина " + graph.get(index).getAdjacentVertex().get(i).getNAME() +
+                        " уже была посещена ранее\n");
+
+            }
         }
         graph.get(index).setColor(1);                                                                           //обрабатана
         graph.get(index).setTimeOut(dfsTimer++);                                                                //время выхода
